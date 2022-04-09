@@ -1,13 +1,13 @@
 import pickle
-from typing import Tuple, Optional
+from typing import Tuple
 from korean_geocoding.section import Section
 from korean_geocoding.sido_dict import SIDO_DICT
 from pathlib import Path
 
-
 class KoreanGeocoding:
     def __init__(self):
         self.geocode_data = dict()
+        self._current_path = Path(__file__).parent.resolve()
 
     def _clean(self, sido_input):
         # TODO 약어를 사용한 시도를 찾을 수 있도록 (서울, 서울시 -> 서울특별시로 자동으로 인식) 함수 삽입 예정
@@ -16,11 +16,10 @@ class KoreanGeocoding:
     def _load_geocode_data(self, sido_input: str):
         sido = sido_input  # _clean 함수 완성 시 교체 예정
         sido_filename = SIDO_DICT.get(sido)
-        #
-        if not sido_filename:
-            raise ValueError("등록된 시도명이 아닙니다. 정식으로 등록된 시도명을 사용해 주세요.")
 
-        fp = open(Path('..', 'data', f"{sido_filename}.dat"), 'rb')
+        if not sido_filename:
+            raise ValueError(f"Cannot find district name {sido_input} from database.")
+        fp = open(Path(self._current_path, 'data', f"{sido_filename}.dat"), 'rb')
         loaded_data = pickle.load(fp, encoding='utf-8')
         self.geocode_data[sido] = loaded_data
 

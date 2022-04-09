@@ -1,4 +1,4 @@
-from setuptools import find_packages, setup
+from setuptools import setup
 
 setup(
     name='korean-geocoding',
@@ -9,7 +9,6 @@ setup(
     install_requires=['requests'],
     description='Korean district name geocoding library',
     url="https://github.com/RE-A/korean-geocoding",
-    package_dir={"": "korean_geocoding",
-                 "data": "data"},
-    packages=find_packages(where='korean_geocoding'),
+    packages=['korean_geocoding'],
+    include_package_data=True
 )
