@@ -18,7 +18,7 @@ class KoreanGeocoding:
         sido_filename = SIDO_DICT.get(sido)
 
         if not sido_filename:
-            raise ValueError(f"Cannot find district name {sido_input} from database.")
+            raise ValueError(f"Cannot recognize district name {sido_input}.")
         fp = open(Path(self._current_path, 'data', f"{sido_filename}.dat"), 'rb')
         loaded_data = pickle.load(fp, encoding='utf-8')
         self.geocode_data[sido] = loaded_data
@@ -26,14 +26,14 @@ class KoreanGeocoding:
     def get_coordinates(self, query: str, delimiter=' ', just_fit=True) -> Tuple[float, float]:
         # 입력한 좌표에 대한 위/경도 조회
         if not isinstance(query, str):
-            raise ValueError("문자열 형태의 주소가 필요합니다.")
+            raise ValueError(f"'{query}' is not a string.")
 
         section = self._search_section(query, delimiter, just_fit)
         return section.coordinates
 
     def _search_section(self, query: str, delimiter=' ', just_fit=True) -> Section:
         if not isinstance(query, str):
-            raise ValueError("문자열 형태의 주소가 필요합니다.")
+            raise ValueError(f"'{query}' is not a string.")
 
         splited_query = query.split(delimiter)
         desired_section = self.geocode_data
@@ -49,7 +49,7 @@ class KoreanGeocoding:
             else:
                 # 매치되지 않는 쿼리문이 남은 상태
                 if just_fit:
-                    raise ValueError("해당 주소와 일치하는 행정구역이 없습니다")
+                    raise ValueError(f"The query '{query}' doesn't match any of the district name.")
                 else:
                     return desired_section
 
@@ -59,6 +59,6 @@ class KoreanGeocoding:
         # 입력된 곳의 하위 행정구역 조회
         section = self._search_section(query, delimiter, just_fit)
         under_districts = []
-        for child in section.children:
+        for child in section.children.values():
             under_districts.append(child.last_addr)
         return under_districts
