@@ -40,21 +40,6 @@ def extract_data(target_sido):
 
 
 if __name__ == "__main__":
-    # 경상남도까지 진행함
-    TEMP_SIDO_DICT = {
-        "광주광역시": "Gwangju",
-        "대구광역시": "Daegu",
-        "대전광역시": "Daejeon",
-        "부산광역시": "Busan",
-        "세종특별자치시": "Sejong",
-        "울산광역시": "Ulsan",
-        "전라남도": "SouthJeolla",
-        "전라북도": "NorthJeolla",
-        "제주특별자치도": "Jeju",
-        "충청남도": "SouthChungcheong",
-        "충청북도": "NorthChungcheong",
-        "인천광역시": "Incheon"
-    }
     for sido in SIDO_DICT:
         data = extract_data(sido)
         set_coordinate_all(data)
