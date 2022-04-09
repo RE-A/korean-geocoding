@@ -2,7 +2,7 @@
 scripts/secret.json
 /.idea/
 */__pycache__/
-/korean_geocoding.egg-info/
+*/korean_geocoding.egg-info/
 /dist/
 /build/
-/.pytest_cache/
+*/.pytest_cache/
