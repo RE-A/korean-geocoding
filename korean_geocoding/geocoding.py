@@ -24,7 +24,7 @@ class KoreanGeocoding:
         loaded_data = pickle.load(fp, encoding='utf-8')
         self.geocode_data[sido] = loaded_data
 
-    def get_coordinates(self, query: str, delimiter=' ', just_fit=True) -> Tuple[Optional[float], Optional[float]]:
+    def get_coordinates(self, query: str, delimiter=' ', just_fit=True) -> Tuple[float, float]:
         # 입력한 좌표에 대한 위/경도 조회
         if not isinstance(query, str):
             raise ValueError("문자열 형태의 주소가 필요합니다.")
