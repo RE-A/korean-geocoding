@@ -4,7 +4,7 @@ class Section:
         self.children = dict()
         self.last_addr = last_addr
         self.full_addr = addr + ' ' + last_addr
-        self.coordinates = None # (경도, 위도)
+        self.coordinates = None  # (경도, 위도)
 
     @staticmethod
     def add_child(root_section, child_sections: list):
@@ -17,7 +17,7 @@ class Section:
 
     @staticmethod
     def _get_addr_tree(root_section, addrlist):
-        addrlist.append(root_section.full_addr)
+        addrlist.append(str(root_section))
         for child in root_section.children.values():
             Section._get_addr_tree(child, addrlist)
 
@@ -27,7 +27,5 @@ class Section:
         Section._get_addr_tree(root_section, full_addr_list)
         return full_addr_list
 
-
-
     def __str__(self):
-        return self.full_addr
+        return self.full_addr + f" {self.coordinates if self.coordinates else ''}"
