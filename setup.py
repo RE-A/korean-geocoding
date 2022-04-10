@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='korean-geocoding',
-    version='0.1.1',
+    version='0.1.2a',
     author='RE-A',
     author_email='skynine73@gmail.com',
     python_requires='>=3.6',
