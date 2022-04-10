@@ -8,6 +8,7 @@ setup(
     python_requires='>=3.6',
     install_requires=['requests'],
     description='Korean district name geocoding library',
+    long_description= "Please view usage and document on https://github.com/RE-A/korean-geocoding.",
     url="https://github.com/RE-A/korean-geocoding",
     packages=['korean_geocoding'],
     include_package_data=True
