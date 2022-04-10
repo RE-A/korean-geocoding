@@ -6,6 +6,9 @@ sys.path.append(Path('..'))
 
 from korean_geocoding.section import Section
 
+
+# 동일 폴더 내에 네이버 API 접속 정보를 담은 secret.json 없으면 오류.
+# NAVER_CLIENT_ID, NAVER_CLIENT_SECRET 값 필요.
 with open(Path("secret.json")) as fp:
     auth = json.load(fp)
 
