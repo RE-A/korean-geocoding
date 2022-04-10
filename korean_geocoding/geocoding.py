@@ -18,9 +18,10 @@ class KoreanGeocoding:
         sido_filename = SIDO_DICT.get(sido)
 
         if not sido_filename:
-            raise ValueError(f"Cannot recognize district name {sido_input}.")
+            raise ValueError(f"Cannot recognize district name '{sido_input}'.")
         fp = open(Path(self._current_path, 'data', f"{sido_filename}.dat"), 'rb')
         loaded_data = pickle.load(fp, encoding='utf-8')
+        fp.close()
         self.geocode_data[sido] = loaded_data
 
     def get_coordinates(self, query: str, delimiter=' ', just_fit=True) -> Tuple[float, float]:
