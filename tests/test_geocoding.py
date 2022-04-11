@@ -49,4 +49,15 @@ def test_get_under_district(kg):
     assert_that(len(kg.get_under_districts(sample_addr2))).is_equal_to(9)
     assert_that(len(kg.get_under_districts(sample_addr3))).is_equal_to(15)
 
+def test_get_distance(kg):
+    sample_addr1 = "서울특별시 용산구 이태원동"
+    sample_point1 = (37.5325225, 126.9950384) # 서울특별시 용산구 이태원동
+    sample_addr2 = "서울특별시 중구 서소문동"
+    sample_point2 = (37.563275, 126.973425) # 서울특별시 중구 서소문동
+
+    assert_that(kg.get_distance(sample_addr1, sample_addr2)).is_equal_to(kg.get_distance(sample_addr1, sample_point2))
+    assert_that(kg.get_distance(sample_addr1, sample_addr2)).is_equal_to(kg.get_distance(sample_point2, sample_point1))
+    assert_that(kg.get_distance(sample_point1, sample_addr2)).is_equal_to(kg.get_distance(sample_addr1, sample_point2))
+    assert_that(kg.get_distance(sample_point1, sample_addr1)).is_equal_to(0)
+
 

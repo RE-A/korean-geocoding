@@ -1,7 +1,8 @@
 import pickle
-from typing import Tuple
+from typing import Tuple, Union
 from korean_geocoding.section import Section
 from korean_geocoding.sido_dict import SIDO_DICT
+from haversine import haversine
 from pathlib import Path
 
 class KoreanGeocoding:
@@ -63,3 +64,15 @@ class KoreanGeocoding:
         for child in section.children.values():
             under_districts.append(child.last_addr)
         return under_districts
+
+    def get_distance(self, query1: Union[str, Tuple[float, float]], query2: Union[str, Tuple[float, float]],
+                     delimiter=' ', just_fit=True) -> float:
+        point1 = query1 # Tuple일시
+        if isinstance(query1, str):
+            point1 = self.get_coordinates(query1, delimiter, just_fit)
+
+        point2 = query2  # Tuple일시
+        if isinstance(query2, str):
+            point2 = self.get_coordinates(query2, delimiter, just_fit)
+
+        return round(haversine(point1, point2), 3)
