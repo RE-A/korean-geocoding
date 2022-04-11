@@ -59,5 +59,7 @@ def test_get_distance(kg):
     assert_that(kg.get_distance(sample_addr1, sample_addr2)).is_equal_to(kg.get_distance(sample_point2, sample_point1))
     assert_that(kg.get_distance(sample_point1, sample_addr2)).is_equal_to(kg.get_distance(sample_addr1, sample_point2))
     assert_that(kg.get_distance(sample_point1, sample_addr1)).is_equal_to(0)
+    assert_that(kg.get_distance((36.123142, 125.333213), "서울특별시 용산구 이태원동")).is_not_equal_to(0)
+
 
 
