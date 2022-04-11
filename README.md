@@ -112,7 +112,7 @@ print(kg.get_under_districts('세종특별자치시'))
 
 ### get_distance(query1, query2, delimiter=' ', just_fit=True)
 
-주어진 두 점 간의 거리를 반환합니다. 지구는 구형이므로, 구형의 표면에서의 두 점간의 거리를 구할 수 있는 haversine 공식을 이용하여 구합니다.  
+주어진 두 점 간의 거리를 km 단위로 반환합니다. 지구는 구형이므로, 구형의 표면에서의 두 점간의 거리를 구할 수 있는 haversine 공식을 이용하여 구합니다.  
 
 query1과 query2는 (위도, 경도) 형태의 Tuple이나, get_coordinates()와 동일한 방식으로 행정구역명을 담은 문자열을 받습니다. 문자열과 튜플의 방식을 혼용해도 됩니다.  
 
