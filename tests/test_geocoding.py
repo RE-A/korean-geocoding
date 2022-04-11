@@ -12,11 +12,11 @@ def kg() -> Kg:
 
 def test_find_coordinates_from_address(kg):
     sample_addr1 = "서울특별시 종로구 종로2가"
-    sample_addr1_coordinates = (126.9869027, 37.5704398)
+    sample_addr1_coordinates = (37.5704398, 126.9869027)
     sample_addr2 = "충청북도 청주시 상당구 월오동"
     sample_addr2_wrong = "충청북도 청주시 상당구 이런곳없다동"
-    sample_addr2_wrong_coordinates = (127.5051229, 36.5897552) # 충청북도 청주시 상당구
-    sample_addr2_coordinates = (127.5458, 36.6247071)
+    sample_addr2_wrong_coordinates = (36.5897552, 127.5051229) # 충청북도 청주시 상당구
+    sample_addr2_coordinates = (36.6247071, 127.5458)
     sample_addr3 = "서울특별시|종로구|종로2가"
 
     addr1_coord = kg.get_coordinates(sample_addr1)
@@ -48,5 +48,18 @@ def test_get_under_district(kg):
     assert_that(len(kg.get_under_districts(sample_addr1))).is_equal_to(25)
     assert_that(len(kg.get_under_districts(sample_addr2))).is_equal_to(9)
     assert_that(len(kg.get_under_districts(sample_addr3))).is_equal_to(15)
+
+def test_get_distance(kg):
+    sample_addr1 = "서울특별시 용산구 이태원동"
+    sample_point1 = (37.5325225, 126.9950384) # 서울특별시 용산구 이태원동
+    sample_addr2 = "서울특별시 중구 서소문동"
+    sample_point2 = (37.563275, 126.973425) # 서울특별시 중구 서소문동
+
+    assert_that(kg.get_distance(sample_addr1, sample_addr2)).is_equal_to(kg.get_distance(sample_addr1, sample_point2))
+    assert_that(kg.get_distance(sample_addr1, sample_addr2)).is_equal_to(kg.get_distance(sample_point2, sample_point1))
+    assert_that(kg.get_distance(sample_point1, sample_addr2)).is_equal_to(kg.get_distance(sample_addr1, sample_point2))
+    assert_that(kg.get_distance(sample_point1, sample_addr1)).is_equal_to(0)
+    assert_that(kg.get_distance((36.123142, 125.333213), "서울특별시 용산구 이태원동")).is_not_equal_to(0)
+
 
 

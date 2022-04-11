@@ -33,9 +33,9 @@ def set_coordinate(section: Section) -> None:
         return  # API 호출은 정상적으로 되었지만 API 서버 또는 쿼리 오류로 데이터가 없는 상태
 
     address_element = content['addresses'][0]
-    latitude = float(address_element['y'])
-    longitude = float(address_element['x'])
-    section.coordinates = (longitude, latitude)
+    latitude = float(address_element['y']) # 위도
+    longitude = float(address_element['x']) # 경도
+    section.coordinates = (latitude, longitude)
 
 
 def set_coordinate_all(root_section):
