@@ -16,7 +16,7 @@ def test_seoul_data_can_load_successfully():
         seoul_data: Section = pickle.load(fp)
     assert_that(len(Section.get_address_full_list(seoul_data))).is_greater_than(800) # 약 800개
     assert_that(len(seoul_data.children)).is_equal_to(SEOUL_COUNT_OF_GU)
-    assert_that(seoul_data.coordinates).is_equal_to((126.9783882, 37.5666103))
+    assert_that(seoul_data.coordinates).is_equal_to((37.5666103, 126.9783882))
 
 def test_other_area_data_can_load():
     for sido in SIDO_DICT:

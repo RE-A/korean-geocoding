@@ -4,7 +4,7 @@ class Section:
         self.children = dict()
         self.last_addr = last_addr
         self.full_addr = addr + ' ' + last_addr
-        self.coordinates = None  # (경도, 위도)
+        self.coordinates = None  # (위도, 경도)
 
     @staticmethod
     def add_child(root_section, child_sections: list):

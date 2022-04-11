@@ -12,11 +12,11 @@ def kg() -> Kg:
 
 def test_find_coordinates_from_address(kg):
     sample_addr1 = "서울특별시 종로구 종로2가"
-    sample_addr1_coordinates = (126.9869027, 37.5704398)
+    sample_addr1_coordinates = (37.5704398, 126.9869027)
     sample_addr2 = "충청북도 청주시 상당구 월오동"
     sample_addr2_wrong = "충청북도 청주시 상당구 이런곳없다동"
-    sample_addr2_wrong_coordinates = (127.5051229, 36.5897552) # 충청북도 청주시 상당구
-    sample_addr2_coordinates = (127.5458, 36.6247071)
+    sample_addr2_wrong_coordinates = (36.5897552, 127.5051229) # 충청북도 청주시 상당구
+    sample_addr2_coordinates = (36.6247071, 127.5458)
     sample_addr3 = "서울특별시|종로구|종로2가"
 
     addr1_coord = kg.get_coordinates(sample_addr1)
