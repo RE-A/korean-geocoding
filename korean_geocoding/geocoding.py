@@ -1,7 +1,8 @@
 import pickle
-from typing import Tuple, Union
+from typing import Tuple, Union, Optional
 from korean_geocoding.section import Section
 from korean_geocoding.sido_dict import SIDO_DICT
+from korean_geocoding.NG_API import Naver_Geocoding
 from haversine import haversine
 from pathlib import Path
 
@@ -9,6 +10,7 @@ class KoreanGeocoding:
     def __init__(self):
         self.geocode_data = dict()
         self._current_path = Path(__file__).parent.resolve()
+        self.naver_api: Optional[Naver_Geocoding] = None
 
     def _clean(self, sido_input):
         # TODO 약어를 사용한 시도를 찾을 수 있도록 (서울, 서울시 -> 서울특별시로 자동으로 인식) 함수 삽입 예정
@@ -24,14 +26,6 @@ class KoreanGeocoding:
         loaded_data = pickle.load(fp, encoding='utf-8')
         fp.close()
         self.geocode_data[sido] = loaded_data
-
-    def get_coordinates(self, query: str, delimiter=' ', just_fit=True) -> Tuple[float, float]:
-        # 입력한 좌표에 대한 위/경도 조회
-        if not isinstance(query, str):
-            raise ValueError(f"'{query}' is not a string.")
-
-        section = self._search_section(query, delimiter, just_fit)
-        return section.coordinates
 
     def _search_section(self, query: str, delimiter=' ', just_fit=True) -> Section:
         if not isinstance(query, str):
@@ -56,6 +50,28 @@ class KoreanGeocoding:
                     return desired_section
 
         return desired_section
+
+    def set_naver_api(self, client_id, client_secret):
+        # 네이버 API 사용을 위한 세팅
+        self.naver_api = Naver_Geocoding(client_id, client_secret)
+
+    def get_coordinates_by_api(self, query: str, delimiter=' ', ignore_empty=False, detailed=False):
+        # TODO : self.naver_api 체크하는 부분 데코레이터로 만들 수 있을 것 같음.
+        if not self.naver_api:
+            raise ValueError("Please call set_naver_api() first and set the NCP client keys.")
+
+        if delimiter != ' ':
+            query = query.replace(delimiter, ' ')
+
+        return self.naver_api.req(query, ignore_empty, detailed)
+
+    def get_coordinates(self, query: str, delimiter=' ', just_fit=True) -> Tuple[float, float]:
+        # 입력한 좌표에 대한 위/경도 조회
+        if not isinstance(query, str):
+            raise ValueError(f"'{query}' is not a string.")
+
+        section = self._search_section(query, delimiter, just_fit)
+        return section.coordinates
 
     def get_under_districts(self, query, delimiter=' ', just_fit=True) -> list:
         # 입력된 곳의 하위 행정구역 조회
