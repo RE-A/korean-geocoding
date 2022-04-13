@@ -2,7 +2,8 @@ import pickle
 from typing import Tuple, Union, Optional
 from korean_geocoding.section import Section
 from korean_geocoding.sido_dict import SIDO_DICT
-from korean_geocoding.NG_API import Naver_Geocoding
+from korean_geocoding.naver_gc_api import Naver_Geocoding
+from korean_geocoding.converter import Converter
 from haversine import haversine
 from pathlib import Path
 
@@ -11,6 +12,7 @@ class KoreanGeocoding:
         self.geocode_data = dict()
         self._current_path = Path(__file__).parent.resolve()
         self.naver_api: Optional[Naver_Geocoding] = None
+        self.converter: Optional[Converter] = None
 
     def _clean(self, sido_input):
         # TODO 약어를 사용한 시도를 찾을 수 있도록 (서울, 서울시 -> 서울특별시로 자동으로 인식) 함수 삽입 예정
@@ -54,6 +56,14 @@ class KoreanGeocoding:
     def set_naver_api(self, client_id, client_secret):
         # 네이버 API 사용을 위한 세팅
         self.naver_api = Naver_Geocoding(client_id, client_secret)
+
+    def set_converter(self, from_crs: str, to_crs: str="epsg:4326"):
+        if not isinstance(from_crs, str):
+            raise ValueError("Parameter should be string format with epsg code, like 'epsg:5178'.")
+        self.converter = Converter(from_crs)
+
+    def convert(self, coordinates: Tuple[float, float]):
+        return self.converter.convert(coordinates)
 
     def get_coordinates_by_api(self, query: str, delimiter=' ', ignore_empty=False, detailed=False):
         # TODO : self.naver_api 체크하는 부분 데코레이터로 만들 수 있을 것 같음.
