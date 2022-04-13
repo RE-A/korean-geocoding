@@ -63,6 +63,8 @@ class KoreanGeocoding:
         self.converter = Converter(from_crs)
 
     def convert(self, coordinates: Tuple[float, float]):
+        if not self.converter:
+            raise ValueError("The converter is not found. Please call set_converter first.")
         return self.converter.convert(coordinates)
 
     def get_coordinates_by_api(self, query: str, delimiter=' ', ignore_empty=False, detailed=False):

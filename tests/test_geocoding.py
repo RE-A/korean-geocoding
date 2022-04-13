@@ -101,4 +101,23 @@ def test_naver_api(kg):
     with pytest.raises(ValueError, match="Cannot find any address"):
         kg.naver_api._check_resp_content(resp_sample3, '쿼리', False)
 
+def test_coordinates_convert(kg):
+    coord_WGS84 = (37.56, 126.97) # 위경도 좌표
+    coord_3857 = (14133857.26, 4517734.55)
+    coord_5174 = (451391.18, 196794.06)
+    
+    # 좌표계 설정하지 않은 상태
+    with pytest.raises(ValueError):
+        kg.convert(coord_3857)
 
+    kg.set_converter("epsg:3857")
+    lat, long = kg.convert(coord_3857)
+    assert_that(coord_WGS84[0]).is_equal_to(pytest.approx(lat, abs=0.01))
+    assert_that(coord_WGS84[1]).is_equal_to(pytest.approx(long, abs=0.01))
+
+    kg.set_converter("epsg:5174")
+    lat, long = kg.convert(coord_5174)
+    print(lat, long)
+    # 블로그에 아래 approx 사용법 정리하기
+    assert_that(coord_WGS84[0]).is_equal_to(pytest.approx(lat, abs=0.01))
+    assert_that(coord_WGS84[1]).is_equal_to(pytest.approx(long, abs=0.01))
