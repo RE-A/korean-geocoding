@@ -61,5 +61,62 @@ def test_get_distance(kg):
     assert_that(kg.get_distance(sample_point1, sample_addr1)).is_equal_to(0)
     assert_that(kg.get_distance((36.123142, 125.333213), "서울특별시 용산구 이태원동")).is_not_equal_to(0)
 
+def test_naver_api(kg):
+    # 실제로 네이버 API를 날린 후 확인하는 건 테스트 세팅이나 성공여부 확인 등 여러 가지 외부적 문제가 생기므로 항상 온다고 가정.
+    # 아래 데이터는 실제 데이터와 관련 없음.
+    # TODO API 서버 모킹해서 response 받는 부분도 테스트 가능하도록 하기
+    resp_sample1 = {'status': 'OK',
+                    'meta': {'totalCount': 1, 'page': 1, 'count': 1},
+                    'addresses': [{'roadAddress': '서울특별시 용산구 새창로 45길 3',
+                                   'jibunAddress': '서울특별시 용산구 새창로 45길 3',
+                                   'x': '126.973425',
+                                   'y': '37.563275',
+                                   'distance': 0.0}],
+                    'errorMessage': ''}
+    resp_sample2 = {'status': 'OK',
+                    'meta': {'totalCount': 2, 'page': 1, 'count': 2},
+                    'addresses': [{'roadAddress': '서울특별시 용산구 새창로 45길 3',
+                                   'jibunAddress': '서울특별시 용산구 새창로 45길 3',
+                                   'x': '126.973425',
+                                   'y': '37.563275',
+                                   'distance': 0.0},
+                                  {'roadAddress': '서울특별시 용산구 새창로 45길 31',
+                                   'jibunAddress': '서울특별시 용산구 새창로 45길 31',
+                                   'x': '126.9735',
+                                   'y': '37.5635',
+                                   'distance': 0.0}],
+                    'errorMessage': ''}
+    resp_sample3 = {'status': 'OK',
+                    'meta': {'totalCount': 0, 'page': 1, 'count': 0},
+                    'addresses': []}
 
 
+    kg.set_naver_api('1234','123444') # 실제로 요청을 보내지 않으므로 했다고 가정
+    assert_that(kg.naver_api.HEADERS['X-NCP-APIGW-API-KEY-ID']).is_equal_to('1234')
+    assert_that(kg.naver_api.HEADERS['X-NCP-APIGW-API-KEY']).is_equal_to('123444')
+
+    assert_that(kg.naver_api._check_resp_content(resp_sample1, '쿼리', False)).is_none() # 에러 없이 정상 통과
+    with pytest.raises(ValueError, match="There are several addresses"):
+        kg.naver_api._check_resp_content(resp_sample2, '쿼리', False)
+    with pytest.raises(ValueError, match="Cannot find any address"):
+        kg.naver_api._check_resp_content(resp_sample3, '쿼리', False)
+
+def test_coordinates_convert(kg):
+    coord_WGS84 = (37.56, 126.97) # 위경도 좌표
+    coord_3857 = (14133857.26, 4517734.55)
+    coord_5174 = (451391.18, 196794.06)
+    
+    # 좌표계 설정하지 않은 상태
+    with pytest.raises(ValueError):
+        kg.convert(coord_3857)
+
+    kg.set_converter("epsg:3857")
+    lat, long = kg.convert(coord_3857)
+    assert_that(coord_WGS84[0]).is_equal_to(pytest.approx(lat, abs=0.01))
+    assert_that(coord_WGS84[1]).is_equal_to(pytest.approx(long, abs=0.01))
+
+    kg.set_converter("epsg:5174")
+    lat, long = kg.convert(coord_5174)
+    # 블로그에 아래 approx 사용법 정리하기
+    assert_that(coord_WGS84[0]).is_equal_to(pytest.approx(lat, abs=0.01))
+    assert_that(coord_WGS84[1]).is_equal_to(pytest.approx(long, abs=0.01))

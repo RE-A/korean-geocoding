@@ -1,8 +1,9 @@
 /venv/
-scripts/secret.json
+secret.json
 /.idea/
 */__pycache__/
 */korean_geocoding.egg-info/
 /dist/
 /build/
 */.pytest_cache/
+/korean_geocoding.egg-info/
