@@ -117,7 +117,6 @@ def test_coordinates_convert(kg):
 
     kg.set_converter("epsg:5174")
     lat, long = kg.convert(coord_5174)
-    print(lat, long)
     # 블로그에 아래 approx 사용법 정리하기
     assert_that(coord_WGS84[0]).is_equal_to(pytest.approx(lat, abs=0.01))
     assert_that(coord_WGS84[1]).is_equal_to(pytest.approx(long, abs=0.01))
