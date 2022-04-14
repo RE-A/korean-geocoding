@@ -60,7 +60,7 @@ class KoreanGeocoding:
     def set_converter(self, from_crs: str, to_crs: str="epsg:4326"):
         if not isinstance(from_crs, str):
             raise ValueError("Parameter should be string format with epsg code, like 'epsg:5178'.")
-        self.converter = Converter(from_crs)
+        self.converter = Converter(from_crs, to_crs)
 
     def convert(self, coordinates: Tuple[float, float]):
         if not self.converter:
