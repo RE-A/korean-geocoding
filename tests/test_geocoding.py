@@ -12,6 +12,7 @@ def kg() -> Kg:
 
 def test_find_coordinates_from_address(kg):
     sample_addr1 = "서울특별시 종로구 종로2가"
+    sample_addr1_abb = "서울시 종로구 종로2가"
     sample_addr1_coordinates = (37.5704398, 126.9869027)
     sample_addr2 = "충청북도 청주시 상당구 월오동"
     sample_addr2_wrong = "충청북도 청주시 상당구 이런곳없다동"
@@ -19,8 +20,11 @@ def test_find_coordinates_from_address(kg):
     sample_addr2_coordinates = (36.6247071, 127.5458)
     sample_addr3 = "서울특별시|종로구|종로2가"
 
+
     addr1_coord = kg.get_coordinates(sample_addr1)
     assert_that(addr1_coord).is_equal_to(sample_addr1_coordinates)
+    addr1_abb_coord = kg.get_coordinates(sample_addr1_abb)
+    assert_that(addr1_abb_coord).is_equal_to(sample_addr1_coordinates)
     addr2_coord = kg.get_coordinates(sample_addr2)
     assert_that(addr2_coord).is_equal_to(sample_addr2_coordinates)
 
@@ -36,18 +40,20 @@ def test_find_wrong_address(kg):
     wrong_address2 = "경기도 성남시 중원구 존재하지않는동"
 
     with pytest.raises(ValueError):
-        long_coord1 = kg.get_coordinates(wrong_address1)
+        wrong_coord1 = kg.get_coordinates(wrong_address1)
     with pytest.raises(ValueError):
-        long_coord2 = kg.get_coordinates(wrong_address2)
+        wrong_coord2 = kg.get_coordinates(wrong_address2)
 
 def test_get_under_district(kg):
     sample_addr1 = "서울특별시"
     sample_addr2 = "충청북도 음성군"
     sample_addr3 = "부산광역시 동구"
+    sample_addr4 = "충북 청주시"
 
     assert_that(len(kg.get_under_districts(sample_addr1))).is_equal_to(25)
     assert_that(len(kg.get_under_districts(sample_addr2))).is_equal_to(9)
     assert_that(len(kg.get_under_districts(sample_addr3))).is_equal_to(15)
+    assert_that(len(kg.get_under_districts(sample_addr4))).is_equal_to(4)
 
 def test_get_distance(kg):
     sample_addr1 = "서울특별시 용산구 이태원동"

@@ -1,7 +1,7 @@
 import pickle
 from typing import Tuple, Union, Optional
 from korean_geocoding.section import Section
-from korean_geocoding.sido_dict import SIDO_DICT
+from korean_geocoding.common import SIDO_DICT, SIDO_ABB
 from korean_geocoding.naver_gc_api import Naver_Geocoding
 from korean_geocoding.converter import Converter
 from haversine import haversine
@@ -14,29 +14,26 @@ class KoreanGeocoding:
         self.naver_api: Optional[Naver_Geocoding] = None
         self.converter: Optional[Converter] = None
 
-    def _clean(self, sido_input):
-        # TODO 약어를 사용한 시도를 찾을 수 있도록 (서울, 서울시 -> 서울특별시로 자동으로 인식) 함수 삽입 예정
-        return sido_input
+    def _clean(self, sido_input) -> Optional[str]:
+        sido = SIDO_ABB.get(sido_input)
+        return sido
 
-    def _load_geocode_data(self, sido_input: str):
-        sido = sido_input  # _clean 함수 완성 시 교체 예정
+    def _load_geocode_data(self, sido: str) -> None:
         sido_filename = SIDO_DICT.get(sido)
 
         if not sido_filename:
-            raise ValueError(f"Cannot recognize district name '{sido_input}'.")
+            raise ValueError(f"Cannot recognize district name '{sido}'.")
         fp = open(Path(self._current_path, 'data', f"{sido_filename}.dat"), 'rb')
         loaded_data = pickle.load(fp, encoding='utf-8')
         fp.close()
         self.geocode_data[sido] = loaded_data
 
     def _search_section(self, query: str, delimiter=' ', just_fit=True) -> Section:
-        if not isinstance(query, str):
-            raise ValueError(f"'{query}' is not a string.")
-
         splited_query = query.split(delimiter)
-        desired_section = self.geocode_data
         sido = splited_query[0]
-        if sido not in desired_section:
+        if sido not in SIDO_DICT:
+            sido = SIDO_ABB.get(sido)
+        if sido not in self.geocode_data:
             self._load_geocode_data(sido)
 
         desired_section = self.geocode_data[sido]
