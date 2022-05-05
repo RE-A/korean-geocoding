@@ -1,7 +1,7 @@
 import openpyxl
 import collections
 from korean_geocoding.section import Section
-from korean_geocoding.sido_dict import SIDO_DICT
+from korean_geocoding.common import SIDO_DICT
 import pickle
 from pathlib import Path
 

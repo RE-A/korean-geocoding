@@ -1,7 +1,7 @@
 # 전체 데이터에 대해 어떤 작업을 해야 할때 사용하는 스크립트
 import collections
 from korean_geocoding.section import Section
-from korean_geocoding.sido_dict import SIDO_DICT
+from korean_geocoding.common import SIDO_DICT
 import pickle
 from pathlib import Path
 

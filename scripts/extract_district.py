@@ -6,7 +6,7 @@ import pickle
 sys.path.append(Path('..'))
 
 from korean_geocoding.section import Section
-from korean_geocoding.sido_dict import SIDO_DICT
+from korean_geocoding.common import SIDO_DICT
 from scripts.set_coordinate import set_coordinate_all
 
 
