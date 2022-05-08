@@ -28,6 +28,29 @@ class Naver_Geocoding:
             err_string += candidates_str
             raise ValueError(err_string)
 
+    def _parse_detail(self, contents: dict) -> dict:
+        """
+        :return:parse된 주소 오브젝트
+        """
+        #  0가지 or 2가지 이상 나오는 경우는 위에서 처리했음.
+        result = dict()
+        addr_content = contents.get('addresses')[0]
+        result['road_address'] = addr_content['roadAddress']
+        result['jibun_address'] = addr_content['jibunAddress']
+        result['english_address'] = addr_content['englishAddress']
+
+        result['address_elements'] = dict()
+        result_addr_elems = result['address_elements']
+        for elem in addr_content['addressElements']:
+            typename = elem['types'][0]
+            result_addr_elems[typename] = elem['longName']
+
+        result['latitude'] = addr_content['y']
+        result['longitude'] = addr_content['x']
+
+        return result
+
+
     def req(self, query, ignore_empty, detailed) -> Union[Optional[tuple], dict]:
         if not self.HEADERS:
             raise ValueError("The authentication field is empty. "
@@ -50,7 +73,7 @@ class Naver_Geocoding:
         self._check_resp_content(content, query, ignore_empty)
 
         if detailed:
-            return content
+            return self._parse_detail(content)
 
         coord = content['addresses'][0]
         return float(coord['y']), float(coord['x'])
@@ -58,9 +81,10 @@ class Naver_Geocoding:
 
 if __name__ == "__main__":
     # For Live Test
-    import json
+    import json, pprint
+    from pathlib import Path
 
-    with open('secret.json', 'r') as fp:
+    with open(Path('..', 'scripts', 'secret.json'), 'r') as fp:
         auth = json.load(fp)
     ng = Naver_Geocoding(auth['NAVER_CLIENT_ID'], auth['NAVER_CLIENT_SECRET'])
-    print(ng.req("서울특별시 중구 서소문동", detailed=True))
+    pprint.pprint(ng.req("서울특별시 용산구 한강대로 366", detailed=True, ignore_empty=False))
