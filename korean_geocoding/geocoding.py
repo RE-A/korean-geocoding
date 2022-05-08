@@ -67,7 +67,7 @@ class KoreanGeocoding:
     def get_coordinates_by_api(self, query: str, delimiter=' ', ignore_empty=False, detailed=False):
         # TODO : self.naver_api 체크하는 부분 데코레이터로 만들 수 있을 것 같음.
         if not self.naver_api:
-            raise ValueError("Please call set_naver_api() first and set the NCP client keys.")
+            raise ValueError("Please call set_naver_api() first and set the Naver Cloud Platform client keys.")
 
         if delimiter != ' ':
             query = query.replace(delimiter, ' ')
