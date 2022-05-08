@@ -70,3 +70,8 @@
 - 위의 파일들 수정일자 보면 아시겠지만 2022년 4월 기준으로 전혀 죽은 프로젝트 아닙니다 ㅠㅠ
 - 앞으로 추가될 기능들은 [여기](https://github.com/RE-A/korean-geocoding/issues/5) 서 정리하는 중입니다.
 - 해당 라이브러리에 개발과 관련된 TMI는 [여기](https://skyseven73.tistory.com/24)에 업데이트 될 예정입니다.
+
+## TroubleShooting
+
+- pip를 통해 설치시 `proj executable not found. Please set the PROJ_DIR variable.` 에러가 날 시:
+pip --version을 통해 버젼 확인, 19.3 미만일 시 해당 버젼 이상으로 업그레이드 필요
