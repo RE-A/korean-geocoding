@@ -7,12 +7,12 @@ Please view usage and document on https://github.com/RE-A/korean-geocoding.
 
 setup(
     name='korean-geocoding',
-    version='0.3.0',
+    version='0.4.0',
     author='RE-A',
     author_email='skynine73@gmail.com',
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     install_requires=['requests', 'haversine', 'pyproj'],
-    description='Korean district name geocoding library',
+    description='Korean district name geocoding library with Naver Geocoding API',
     long_description=long_description,
     url="https://github.com/RE-A/korean-geocoding",
     packages=['korean_geocoding'],
